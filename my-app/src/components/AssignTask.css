@@ -1,0 +1,231 @@
+.create-field-form {
+  display: flex;
+  gap: 8px;            /* similar to space-x-2 */
+  margin-bottom: 8px;  /* similar to mb-2 */
+}
+
+.create-field-input {
+  flex: 1;
+  padding: 8px;        /* similar to p-2 */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.create-field-button {
+  background-color: #16a34a; /* similar to bg-green-600 */
+  color: white;
+  padding: 4px 12px;   /* similar to px-4 py-1 */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.create-field-button:hover {
+  background-color: #15803d; /* darker green on hover */
+}
+.create-project-form {
+  display: flex;
+  gap: 8px;            /* similar to space-x-2 */
+  margin-bottom: 16px; /* similar to mb-4 */
+}
+
+.create-project-input {
+  flex: 1;
+  padding: 8px;        /* similar to p-2 */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.create-project-button {
+  background-color: #2563eb; /* similar to bg-blue-600 */
+  color: white;
+  padding: 8px 16px;   /* similar to px-4 py-2 */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.create-project-button:hover {
+  background-color: #1e40af; /* darker blue on hover */
+}
+.create-subfield-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;             /* similar to space-y-2 */
+  margin-bottom: 8px;   /* similar to mb-2 */
+}
+
+.create-subfield-input {
+  width: 100%;
+  padding: 8px;         /* similar to p-2 */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.create-subfield-button {
+  background-color: #7e22ce; /* similar to bg-purple-600 */
+  color: white;
+  padding: 4px 12px;    /* similar to px-3 py-1 */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.create-subfield-button:hover {
+  background-color: #5b21b6; /* darker purple on hover */
+}
+.field-list {
+  margin-left: 16px; /* similar to ml-4 */
+}
+
+.field-list-title {
+  font-weight: 600;   /* similar to font-semibold */
+  margin-bottom: 4px; /* similar to mb-1 */
+}
+
+.field-list-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.field-list-item {
+  border: 1px solid #ccc;
+  padding: 8px;       /* similar to p-2 */
+  border-radius: 4px; /* similar to rounded */
+  margin-bottom: 4px; /* similar to mb-1 */
+}
+.project-list {
+  /* Add padding or margin if you like */
+}
+
+.project-list-title {
+  font-size: 20px;          /* similar to text-xl */
+  font-weight: 600;         /* similar to font-semibold */
+  margin-bottom: 8px;       /* similar to mb-2 */
+}
+
+.project-list-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.project-list-item {
+  margin-bottom: 8px;       /* similar to mb-2 */
+  border: 1px solid #ccc;
+  padding: 8px;             /* similar to p-2 */
+  border-radius: 4px;       /* similar to rounded */
+}
+
+.project-name {
+  font-weight: 600;         /* similar to font-semibold */
+}
+.subfield-list {
+  margin-left: 16px;         /* similar to ml-4 */
+}
+
+.subfield-title {
+  font-weight: 500;          /* similar to font-medium */
+  margin-bottom: 4px;        /* similar to mb-1 */
+}
+
+.subfield-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.subfield-item {
+  border: 1px solid #ccc;
+  padding: 8px;              /* similar to p-2 */
+  border-radius: 4px;        /* similar to rounded */
+  margin-bottom: 4px;        /* similar to mb-1 */
+}
+
+.subfield-desc {
+  color: #6b7280;            /* similar to text-gray-500 */
+}
+.agent-task-container {
+  padding: 16px;                /* similar to p-4 */
+  max-width: 800px;             /* similar to max-w-4xl */
+  margin: 0 auto;               /* similar to mx-auto */
+}
+
+.agent-task-title {
+  font-size: 24px;              /* similar to text-2xl */
+  font-weight: bold;            /* similar to font-bold */
+  margin-bottom: 16px;          /* similar to mb-4 */
+}
+.project-item, .field-item {
+  cursor: pointer;
+  padding: 4px;
+  border: 1px solid #ccc;
+  margin: 2px 0;
+  border-radius: 4px;
+}
+.project-item:hover, .field-item:hover {
+  background: #f0f0f0;
+}
+
+.tabs button {
+  padding: 6px 10px;
+  margin: 0 2px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  background: #eee;
+}
+.tabs button.active {
+  background: #007bff;
+  color: white;
+}
+
+.form-inline {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+.form-inline input {
+  flex: 1;
+  padding: 4px;
+}
+.form-inline button {
+  padding: 4px 8px;
+}
+
+.form-inline-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+.form-inline-vertical input {
+  padding: 4px;
+}
+.form-inline-vertical button {
+  align-self: flex-start;
+  padding: 4px 8px;
+}
+
+.back-btn {
+  margin-bottom: 8px;
+}
+.item {
+  border: 1px solid #ccc;
+  padding: 6px;
+  margin-bottom: 4px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.back-btn {
+  margin-bottom: 8px;
+}
