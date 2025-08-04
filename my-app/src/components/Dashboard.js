@@ -8,7 +8,7 @@ export default function Dashboard() {
   const [expandedProjectId, setExpandedProjectId] = useState(null);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/projects')
+    axios.get('http://13.233.122.10:5000/projects')
       .then(res => setProjects(res.data))
       .catch(err => console.error('Failed to fetch projects:', err));
   }, []);

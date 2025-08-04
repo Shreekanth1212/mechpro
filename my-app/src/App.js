@@ -13,7 +13,7 @@ export default function App() {
       <div className="app-container">
         <header className="app-header">
           <div className="header-content">
-            <h1 className="app-title">Mechanical Testing App</h1>
+            <h1 className="app-title">Finder</h1>
             <nav className="app-nav">
               <NavLink to="/admin" className="nav-link">
                 Admin

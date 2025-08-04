@@ -9,7 +9,7 @@ export default function FieldList({ project, setProjects, onSelectField }) {
       ...project,
       fields: [...project.fields, newField]
     };
-    await axios.put(`http://localhost:5000/projects/${project.id}`, updatedProject);
+    await axios.put(`http://13.233.122.10:5000/projects/${project.id}`, updatedProject);
     setProjects(prev => prev.map(p => p.id === project.id ? updatedProject : p));
   };
 

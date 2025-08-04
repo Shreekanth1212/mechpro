@@ -15,7 +15,7 @@ export default function SubfieldList({ field, project, setProjects }) {
       )
     };
     setProjects(prev => prev.map(p => p.id === project.id ? updatedProject : p));
-    await axios.put(`http://localhost:5000/projects/${project.id}`, updatedProject);
+    await axios.put(`http://13.233.122.10:5000/projects/${project.id}`, updatedProject);
   };
 
   const handleUpload = (subfieldId, file) => {
@@ -44,7 +44,7 @@ export default function SubfieldList({ field, project, setProjects }) {
       )
     };
     setProjects(prev => prev.map(p => p.id === project.id ? updatedProject : p));
-    await axios.put(`http://localhost:5000/projects/${project.id}`, updatedProject);
+    await axios.put(`http://13.233.122.10:5000/projects/${project.id}`, updatedProject);
   };
 
   const startCamera = async (subfieldId) => {

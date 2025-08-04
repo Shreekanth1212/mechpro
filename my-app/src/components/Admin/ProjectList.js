@@ -12,13 +12,13 @@ export default function ProjectList() {
   }, []);
 
   const fetchProjects = async () => {
-    const res = await axios.get('http://localhost:5000/projects');
+    const res = await axios.get('http://13.233.122.10:5000/projects');
     setProjects(res.data);
   };
 
   const addProject = async project => {
     const newProject = { ...project, fields: [] };
-    const res = await axios.post('http://localhost:5000/projects', newProject);
+    const res = await axios.post('http://13.233.122.10:5000/projects', newProject);
     setProjects(prev => [...prev, res.data]);
   };
 
