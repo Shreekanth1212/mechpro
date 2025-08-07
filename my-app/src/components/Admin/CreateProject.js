@@ -12,13 +12,13 @@ export default function CreateProject({ onAdd }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="form-inline">
+    <form onSubmit={handleSubmit} className="pms-form-inline">
       <input
         placeholder="New Project Name"
         value={name}
         onChange={e => setName(e.target.value)}
       />
-      <button>Add</button>
+      <button type="submit">Add</button>
     </form>
   );
 }

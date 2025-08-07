@@ -1,28 +1,32 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
-import CreateSubfield from './CreateSubfield';
+import CreateSubfield from './CreateSubfield'; // assumes this component exists
 
 export default function SubfieldList({ field, project, setProjects }) {
   const [capturingSubfieldId, setCapturingSubfieldId] = useState(null);
   const videoRef = useRef();
 
-  const addSubfield = async subfield => {
+  const addSubfield = async (subfield) => {
     const newSubfield = { ...subfield, id: Date.now(), images: [] };
+
     const updatedProject = {
       ...project,
       fields: project.fields.map(f =>
-        f.id === field.id ? { ...f, subfields: [...f.subfields, newSubfield] } : f
+        f.id === field.id
+          ? { ...f, subfields: [...(f.subfields || []), newSubfield] }
+          : f
       )
     };
-    setProjects(prev => prev.map(p => p.id === project.id ? updatedProject : p));
-    await axios.put(`http://13.233.122.10:5000/projects/${project.id}`, updatedProject);
+
+    setProjects(prev => prev.map(p => (p.id === project.id ? updatedProject : p)));
+    await axios.put(`http://localhost:5000/projects/${project.id}`, updatedProject);
   };
 
   const handleUpload = (subfieldId, file) => {
     if (!file) return;
     const reader = new FileReader();
-    reader.onloadend = async () => {
-      await saveImage(subfieldId, reader.result);
+    reader.onloadend = () => {
+      saveImage(subfieldId, reader.result);
     };
     reader.readAsDataURL(file);
   };
@@ -43,8 +47,9 @@ export default function SubfieldList({ field, project, setProjects }) {
           : f
       )
     };
-    setProjects(prev => prev.map(p => p.id === project.id ? updatedProject : p));
-    await axios.put(`http://13.233.122.10:5000/projects/${project.id}`, updatedProject);
+
+    setProjects(prev => prev.map(p => (p.id === project.id ? updatedProject : p)));
+    await axios.put(`http://localhost:5000/projects/${project.id}`, updatedProject);
   };
 
   const startCamera = async (subfieldId) => {
@@ -59,7 +64,6 @@ export default function SubfieldList({ field, project, setProjects }) {
   };
 
   const takePhoto = async () => {
-    if (!videoRef.current) return;
     const canvas = document.createElement('canvas');
     canvas.width = videoRef.current.videoWidth;
     canvas.height = videoRef.current.videoHeight;
@@ -88,38 +92,36 @@ export default function SubfieldList({ field, project, setProjects }) {
     <div className="subfield-list">
       <h4 className="subfield-title">Subfields of {currentField?.name}</h4>
       <CreateSubfield onAdd={addSubfield} />
+      
       <ul className="subfield-items">
         {(currentField?.subfields || []).map(sf => (
           <li key={sf.id} className="subfield-item" style={{ marginBottom: '15px' }}>
             <div>
-              <strong>{sf.name}</strong> — <span>{sf.description}</span>
+              <strong>{sf.name}</strong><br />
+              <em>{sf.description}</em>
             </div>
 
-            {/* Upload from gallery / files */}
             <input
               type="file"
               accept="image/*"
-              capture="environment"
               onChange={e => handleUpload(sf.id, e.target.files[0])}
               style={{ marginTop: '5px' }}
             />
-
-            {/* Take photo directly */}
             <button onClick={() => startCamera(sf.id)} style={{ marginLeft: '8px' }}>
               📸 Take Photo
             </button>
 
-            <div style={{ display: 'flex', flexWrap: 'wrap', marginTop: '5px', gap: '4px' }}>
+            <div style={{ display: 'flex', gap: '6px', marginTop: '6px', flexWrap: 'wrap' }}>
               {(sf.images || []).map((img, idx) => (
                 <img
                   key={idx}
                   src={img}
-                  alt="upload"
+                  alt="subfield"
                   style={{
                     width: '60px',
                     height: '60px',
                     objectFit: 'cover',
-                    borderRadius: '4px',
+                    borderRadius: '5px',
                     border: '1px solid #ccc'
                   }}
                 />
@@ -129,15 +131,15 @@ export default function SubfieldList({ field, project, setProjects }) {
         ))}
       </ul>
 
-      {/* Camera preview modal */}
       {capturingSubfieldId && (
         <div style={{
-          position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
-          background: 'rgba(0,0,0,0.8)', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column'
+          position: 'fixed', top: 0, left: 0, width: '100%',
+          height: '100%', background: 'rgba(0,0,0,0.85)',
+          display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column'
         }}>
-          <video ref={videoRef} style={{ width: '80%', maxWidth: '400px', borderRadius: '8px' }} />
-          <div style={{ marginTop: '10px' }}>
-            <button onClick={takePhoto} style={{ marginRight: '8px' }}>📸 Capture</button>
+          <video ref={videoRef} style={{ width: '80%', maxWidth: '400px', borderRadius: '10px' }} />
+          <div style={{ marginTop: '15px' }}>
+            <button onClick={takePhoto} style={{ marginRight: '10px' }}>📸 Capture</button>
             <button onClick={cancelCapture}>❌ Cancel</button>
           </div>
         </div>

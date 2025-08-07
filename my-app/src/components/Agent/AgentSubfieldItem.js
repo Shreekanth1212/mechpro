@@ -13,7 +13,7 @@ export default function AgentSubfieldItem({ project, field, subfield, setProject
   const updateProject = async (updatedFields) => {
     const updatedProject = { ...project, fields: updatedFields };
     try {
-      await axios.put(`http://13.233.122.10:5000/projects/${project.id}`, updatedProject);
+      await axios.put(`http://localhost:5000/projects/${project.id}`, updatedProject);
       setProjects(prev => prev.map(p => (p.id === project.id ? updatedProject : p)));
     } catch (error) {
       console.error('Failed to update project:', error);

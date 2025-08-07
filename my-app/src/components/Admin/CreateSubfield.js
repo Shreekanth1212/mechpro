@@ -1,31 +1,30 @@
 import React, { useState } from 'react';
 
 export default function CreateSubfield({ onAdd }) {
-  const [name, setName] = useState('');
-  const [desc, setDesc] = useState('');
+  const [subfield, setSubfield] = useState({ name: '', description: '' });
 
-  const handleSubmit = e => {
-    e.preventDefault();
-    if (name.trim()) {
-      onAdd({ name, description: desc });
-      setName('');
-      setDesc('');
-    }
+  const handleAdd = () => {
+    if (!subfield.name.trim()) return;
+    onAdd(subfield);
+    setSubfield({ name: '', description: '' });
   };
 
   return (
-    <form onSubmit={handleSubmit} className="form-inline-vertical">
+    <div className="create-subfield">
       <input
+        type="text"
+        value={subfield.name}
+        onChange={e => setSubfield({ ...subfield, name: e.target.value })}
         placeholder="Subfield Name"
-        value={name}
-        onChange={e => setName(e.target.value)}
+        className="pms-input"
       />
-      <input
-        placeholder="Description"
-        value={desc}
-        onChange={e => setDesc(e.target.value)}
+      <textarea
+        value={subfield.description}
+        onChange={e => setSubfield({ ...subfield, description: e.target.value })}
+        placeholder="Subfield Description"
+        className="pms-textarea"
       />
-      <button>Add</button>
-    </form>
+      <button onClick={handleAdd} className="pms-add-btn">Add Subfield</button>
+    </div>
   );
 }
