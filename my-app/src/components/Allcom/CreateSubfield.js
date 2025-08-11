@@ -10,21 +10,23 @@ export default function CreateSubfield({ onAdd }) {
   };
 
   return (
-    <div className="create-subfield">
+    <div className="create-subfield-container">
       <input
         type="text"
         value={subfield.name}
         onChange={e => setSubfield({ ...subfield, name: e.target.value })}
         placeholder="Subfield Name"
-        className="pms-input"
+        className="create-subfield-input"
       />
       <textarea
         value={subfield.description}
         onChange={e => setSubfield({ ...subfield, description: e.target.value })}
         placeholder="Subfield Description"
-        className="pms-textarea"
+        className="create-subfield-textarea"
       />
-      <button onClick={handleAdd} className="pms-add-btn">Add Subfield</button>
+      <button onClick={handleAdd} className="create-subfield-btn">
+        Add Subfield
+      </button>
     </div>
   );
 }

@@ -63,7 +63,9 @@ export default function Dashboard() {
           );
 
           return (
+            
             <div key={project.id} className="project-card">
+              
               <button
                 onClick={() => toggleProject(project.id)}
                 className="project-header"

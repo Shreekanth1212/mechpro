@@ -2,17 +2,16 @@ import React, { useState, useEffect } from 'react';
 import FieldList from './FieldList';
 import SubfieldList from './SubfieldList';
 
+
 export default function ProjectDetail({ project, projects, setProjects, goBack }) {
   const [selectedField, setSelectedField] = useState(null);
 
-  // Refresh the project reference
   const currentProject = projects?.find(p => p.id === project?.id);
 
   useEffect(() => {
     console.log('🧩 currentProject:', currentProject);
   }, [currentProject]);
 
-  // Guard if currentProject is not found yet
   if (!currentProject) {
     return (
       <div className="pms-project-detail">

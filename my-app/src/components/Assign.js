@@ -1,5 +1,5 @@
-import ProjectList from './Admin/ProjectList';
-import './AssignTask.css';
+import ProjectList from './Allcom/ProjectList';
+
 
 
 export default function AgentTask() {

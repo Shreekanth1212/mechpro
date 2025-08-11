@@ -2,16 +2,16 @@ import React, { useEffect } from 'react';
 import CreateField from './CreateField';
 import axios from 'axios';
 
+
 export default function FieldList({ project, setProjects, onSelectField }) {
   useEffect(() => {
     console.log('📦 FieldList received project:', project);
   }, [project]);
 
-  // Safely handle case where project is not yet selected or loading
   if (!project) {
     return (
-      <div className="field-list">
-        <p style={{ color: 'gray' }}>⚠️ No project selected.</p>
+      <div className="field-list-container">
+        <p className="field-list-message">⚠️ No project selected.</p>
       </div>
     );
   }
@@ -26,7 +26,7 @@ export default function FieldList({ project, setProjects, onSelectField }) {
 
       const updatedProject = {
         ...project,
-        fields: [...(project.fields || []), newField]  // default to [] if undefined
+        fields: [...(project.fields || []), newField]
       };
 
       console.log('📤 Updating project with new field:', updatedProject);
@@ -43,15 +43,15 @@ export default function FieldList({ project, setProjects, onSelectField }) {
   };
 
   return (
-    <div className="field-list">
+    <div className="field-list-container">
       <CreateField onAdd={addField} />
 
       {(project.fields && project.fields.length > 0) ? (
-        <ul>
+        <ul className="field-list-ul">
           {project.fields.map((field) => (
             <li
               key={field.id}
-              className="item"
+              className="field-list-item"
               onClick={() => onSelectField(field)}
             >
               {field.name}
@@ -59,7 +59,7 @@ export default function FieldList({ project, setProjects, onSelectField }) {
           ))}
         </ul>
       ) : (
-        <p style={{ color: 'gray' }}>📭 No fields yet. Add one above.</p>
+        <p className="field-list-message">📭 No fields yet. Add one above.</p>
       )}
     </div>
   );

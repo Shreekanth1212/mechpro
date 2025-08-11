@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
 
-import AssignTask from './components/AssignTask';
-import AgentPage from './components/Agent/AgentPage';
+import AssignTask from './components/Assign';
+
 import Dashboard from './components/Dashboard';
 
 import './App.css';
@@ -15,12 +15,8 @@ export default function App() {
           <div className="header-content">
             <h1 className="app-title">Finder</h1>
             <nav className="app-nav">
-              <NavLink to="/admin" className="nav-link">
-                Admin
-              </NavLink>
-              <NavLink to="/agent" className="nav-link">
-                Agent
-              </NavLink>
+             
+            
               <NavLink to="/dashboard" className="nav-link">
                 Dashboard
               </NavLink>
@@ -32,7 +28,7 @@ export default function App() {
         <main className="app-main">
           <Routes>
             <Route path="/admin" element={<AssignTask />} />
-            <Route path="/agent" element={<AgentPage />} />
+            {/* <Route path="/agent" element={<AgentPage />} /> */}
             <Route path="/dashboard" element={<Dashboard />} />
          
           </Routes>
