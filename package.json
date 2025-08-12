@@ -2,6 +2,7 @@
   "name": "mech",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "server.js",
   "scripts": {
     "start": "node backend/server.js",
@@ -12,8 +13,13 @@
   "license": "ISC",
   "dependencies": {
     "aws-sdk": "^2.1692.0",
+    "bcryptjs": "^3.0.2",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.17.1",
     "multer": "^2.0.2"
   },
   "devDependencies": {
