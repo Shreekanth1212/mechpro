@@ -1,14 +1,18 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Login from "./pages/auth/Login";
 import Signup from "./pages/auth/Signup";
 import HomeLayout from "./pages/layout/HomeLayout";
 import AuthLayout from "./pages/layout/AuthLayout";
+import Loader from "./components/Loader";
+import RoleProtectedRoute from "./pages/layout/RoleProtectedRoute";
 
 axios.defaults.withCredentials = true;
 
 function App() {
+  const navigate = useNavigate();
   const [isDarkMode, setIsDarkMode] = useState(() => {
     return localStorage.getItem("isDarkMode") === "true";
   });
@@ -39,6 +43,21 @@ function App() {
       .finally(() => setLoading(false));
   }, []);
 
+   useEffect(() => {
+    const responseInterceptor = axios.interceptors.response.use(
+      response => response,
+      error => {
+        if (error.response && error.response.status === 401) {
+          setUserData(null);
+          navigate("/login", { replace: true });
+        }
+        return Promise.reject(error);
+      }
+    );
+    return () => {
+      axios.interceptors.response.eject(responseInterceptor);
+    };
+  }, [navigate]);
   const handleLogout = async () => {
     try {
       await axios.post("/api/auth/logout");
@@ -47,13 +66,8 @@ function App() {
       console.error("Logout failed:", error);
     }
   };
-  if (loading) return (
-    <div className="min-h-screen flex flex-col dark:bg-gray-900 dark:text-white transition-colors duration-300">
-      <div className="flex flex-grow justify-center items-center">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500 dark:border-blue-300"></div>
-      </div>
-    </div>
-  );
+  if (loading) return <Loader />;
+
 
   return (
     <Routes>
@@ -61,7 +75,7 @@ function App() {
         path="/login"
         element={
           userData ? (
-            <Navigate to={`/${userData.role}/dashboard`} />
+            <Navigate to={`/${userData.role}/dashboard`} replace />
           ) : (
             <AuthLayout>
               <Login onLogin={setUserData} />
@@ -73,7 +87,7 @@ function App() {
         path="/signup"
         element={
           userData ? (
-            <Navigate to={`/${userData.role}/dashboard`} />
+            <Navigate to={`/${userData.role}/dashboard`} replace />
           ) : (
             <AuthLayout>
               <Signup onLogin={setUserData} />
@@ -81,18 +95,47 @@ function App() {
           )
         }
       />
-      <Route path="/:role/*" element={
-        userData ? (
-          <HomeLayout userData={userData} isDarkMode={isDarkMode} toggleTheme={toggleTheme} handleLogout={handleLogout} updateUser={setUserData} />
-        ) : (
-          <Navigate to="/login" />
-        )
-      }
+
+      {/* Admin Routes */}
+      <Route
+        path="/admin/*"
+        element={
+          <RoleProtectedRoute userData={userData} allowedRoles={["admin"]}>
+            <HomeLayout
+              userData={userData}
+              isDarkMode={isDarkMode}
+              toggleTheme={toggleTheme}
+              handleLogout={handleLogout}
+              updateUser={setUserData}
+            />
+          </RoleProtectedRoute>
+        }
       />
 
-      <Route path="*" element={<Navigate to={userData ? `/${userData.role}/dashboard` : "/login"} />} />
+      {/* Member Routes */}
+      <Route
+        path="/member/*"
+        element={
+          <RoleProtectedRoute userData={userData} allowedRoles={["member"]}>
+            <HomeLayout
+              userData={userData}
+              isDarkMode={isDarkMode}
+              toggleTheme={toggleTheme}
+              handleLogout={handleLogout}
+              updateUser={setUserData}
+            />
+          </RoleProtectedRoute>
+        }
+      />
+
+      <Route
+        path="*"
+        element={
+          <Navigate to={userData ? `/${userData.role}/dashboard` : "/login"} replace />
+        }
+      />
     </Routes>
   );
-}
+};
 
 export default App;
