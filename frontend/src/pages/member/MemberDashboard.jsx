@@ -5,6 +5,9 @@ import ProductList from "../product/ProductList";
 import ProductDetailPage from "../product/ProductDetailPage";
 import FieldDetailPage from "../product/FieldDetailPage";
 import ProductReviewPage from "../product/ProductReviewPage";
+
+import jsPDF from "jspdf";
+
 const MemberDashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [products, setProducts] = useState([]);
@@ -75,6 +78,169 @@ const MemberDashboard = () => {
     return true;
   };
 
+  const downloadSelectedProduct = (product) => {
+    const formatDate = (dateStr) => {
+      try {
+        return new Date(dateStr).toLocaleString();
+      } catch {
+        return "N/A";
+      }
+    };
+    const timestamp = Date.now();
+    const fileName = `${(product.name || "product").replace(/\s+/g, "_")}_${timestamp}.pdf`;
+
+    let htmlContent = `
+    <html>
+      <head>
+        <title>${product.name || "Product"}</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            padding: 30px;
+            background: white;
+            color: #333;
+          }
+          h1 {
+            font-size: 26px;
+            margin-bottom: 5px;
+            color: #007BFF;
+          }
+          p {
+            font-size: 14px;
+            margin: 4px 0 12px 0;
+          }
+          h2 {
+            font-size: 20px;
+            margin-top: 20px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 3px;
+            color: #444;
+          }
+          h3 {
+            font-size: 16px;
+            margin-top: 10px;
+            color: #555;
+          }
+          .subfield {
+            margin-left: 20px;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 6px;
+            margin-top: 8px;
+          }
+          .image-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+          }
+          .image-box {
+            flex: 1;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 5px;
+            background: #fff;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+          }
+          .image-box h4 {
+            font-size: 13px;
+            margin: 4px 0;
+            font-weight: bold;
+            color: #666;
+          }
+          .image-box img {
+            max-width: 100%;
+            max-height: 140px;
+            border-radius: 4px;
+            object-fit: contain;
+          }
+          .empty-box {
+            width: 100%;
+            height: 140px;
+            background: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            color: #aaa;
+            border-radius: 4px;
+          }
+          @media print {
+            body { padding: 0; }
+            h1, h2, h3, h4 { color: black; }
+          }
+        </style>
+      </head>
+      <body>
+        <h1>${product.name || "Unnamed Product"}</h1>
+        <p><strong>Description:</strong> ${product.description || "N/A"}</p>
+        <p><strong>Created At:</strong> ${formatDate(product.createdAt)}</p>
+        <p><strong>Updated At:</strong> ${formatDate(product.updatedAt)}</p>
+  `;
+
+    if (product.fields) {
+      for (const field of product.fields) {
+        htmlContent += `<h2>Field: ${field.name}</h2>`;
+
+        for (const subfield of field.subfields || []) {
+          htmlContent += `
+          <div class="subfield">
+            <h3>Subfield: ${subfield.name}</h3>
+            <p><strong>Description:</strong> ${subfield.description || "N/A"}</p>
+        `;
+
+          let imgIndex = 1;
+          for (const imgObj of subfield.images || []) {
+            htmlContent += `
+            <div class="image-row">
+              <div class="image-box">
+                <h4>Defect Image ${imgIndex}</h4>
+                ${imgObj.image
+                ? `<img src="${imgObj.image}" alt="Defect Image ${imgIndex}" 
+                           onerror="this.onerror=null;this.parentElement.innerHTML='<div class=\'empty-box\'>Image Not Available</div>'" />`
+                : `<div class="empty-box">Image Not Available</div>`
+              }
+              </div>
+              <div class="image-box">
+                <h4>Review Image ${imgIndex}</h4>
+                ${imgObj.reviewImage
+                ? `<img src="${imgObj.reviewImage}" alt="Review Image ${imgIndex}" 
+                           onerror="this.onerror=null;this.parentElement.innerHTML='<div class=\'empty-box\'>Image Not Available</div>'" />`
+                : `<div class="empty-box">Image Not Available</div>`
+              }
+              </div>
+            </div>
+          `;
+            imgIndex++;
+          }
+
+          htmlContent += `</div>`;
+        }
+      }
+    }
+
+    htmlContent += `
+      <script>
+        window.onload = function() {
+          document.title = "${fileName}"; 
+          window.print();
+        };
+      </script>
+    </body>
+  </html>
+  `;
+
+    const printWindow = window.open("", "_blank");
+    printWindow.document.open();
+    printWindow.document.write(htmlContent);
+    printWindow.document.close();
+  };
+
+
+
 
   const handleDeleteProduct = async (productId) => {
     const confirmDeleteModal = document.createElement('div');
@@ -125,6 +291,9 @@ const MemberDashboard = () => {
           }}
           onReviewProduct={(product) => {
             setSelectedProductForReview(product);
+          }}
+          onDownloadProduct={(product) => {
+            downloadSelectedProduct(product);
           }}
         />
       )}

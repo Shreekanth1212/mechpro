@@ -1,15 +1,15 @@
 import { useState } from "react";
 import ProductPage from "../product/ProductPage";
-const ProductList = ({ products, onSaveProduct, onDeleteProduct, selectedProductToEdit, setSelectedProductToEdit, onViewProductDetails, onReviewProduct }) => {
+const ProductList = ({ products, onSaveProduct, onDeleteProduct, selectedProductToEdit, setSelectedProductToEdit, onViewProductDetails, onReviewProduct, onDownloadProduct }) => {
     const [isAddingProduct, setIsAddingProduct] = useState(false);
     const showProductForm = isAddingProduct || selectedProductToEdit !== null;
     const handleAddNewProductClick = () => {
-        setSelectedProductToEdit(null); 
+        setSelectedProductToEdit(null);
         setIsAddingProduct(true);
     };
     const handleEditProductClick = (product) => {
         setSelectedProductToEdit(product);
-        setIsAddingProduct(false); 
+        setIsAddingProduct(false);
     };
     const handleCancelProductForm = () => {
         setSelectedProductToEdit(null);
@@ -20,7 +20,7 @@ const ProductList = ({ products, onSaveProduct, onDeleteProduct, selectedProduct
         <main className="flex-grow flex flex-col items-center p-4 w-full">
             <div className="w-full bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6">
                 <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-2xl font-bold text-gray-800 dark:text-white">Products</h3> 
+                    <h3 className="text-2xl font-bold text-gray-800 dark:text-white">Products</h3>
                     <button
                         onClick={showProductForm ? handleCancelProductForm : handleAddNewProductClick}
                         className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-75 transition duration-300 ease-in-out transform hover:scale-105"
@@ -32,7 +32,7 @@ const ProductList = ({ products, onSaveProduct, onDeleteProduct, selectedProduct
 
                 {showProductForm ? (
                     <ProductPage
-                        productToEdit={selectedProductToEdit} 
+                        productToEdit={selectedProductToEdit}
                         onSaveProduct={onSaveProduct}
                         onCancelEdit={handleCancelProductForm}
                     />
@@ -78,6 +78,16 @@ const ProductList = ({ products, onSaveProduct, onDeleteProduct, selectedProduct
                                                     <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1.5a1 1 0 01-2 0V3a1 1 0 011-1zm0 14a1 1 0 01-1-1v-1.5a1 1 0 012 0V15a1 1 0 01-1 1zM3 10a1 1 0 01-1-1V8a1 1 0 012 0v1a1 1 0 01-1 1zm14 0a1 1 0 01-1-1V8a1 1 0 012 0v1a1 1 0 01-1 1zM7.464 6.343a1 1 0 011.414 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zm5.656 5.657a1 1 0 011.414 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zm-7.071 0a1 1 0 010 1.414l-.707.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM12.536 6.343a1 1 0 010 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 0zM10 14a4 4 0 100-8 4 4 0 000 8z" clipRule="evenodd" />
                                                 </svg>
                                             </button>
+                                            <button
+                                                onClick={() => onDownloadProduct(product)}
+                                                className="bg-green-500 hover:bg-green-600 text-white text-sm font-bold p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-75 transition duration-200"
+                                                aria-label="Download"
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fillRule="evenodd" d="M3 14a1 1 0 011 1v1h12v-1a1 1 0 112 0v2a1 1 0 01-1 1H3a1 1 0 01-1-1v-2a1 1 0 011-1zm7-12a1 1 0 011 1v7.586l2.293-2.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4A1 1 0 015.707 8.293L8 10.586V3a1 1 0 011-1z" clipRule="evenodd" />
+                                                </svg>
+                                            </button>
+
                                         </div>
                                     </li>
                                 ))}
