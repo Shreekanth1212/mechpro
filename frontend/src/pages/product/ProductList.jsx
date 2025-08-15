@@ -1,51 +1,26 @@
 import { useState } from "react";
 import ProductPage from "../product/ProductPage";
-const ProductList = ({ products, onSaveProduct, onDeleteProduct, selectedProductToEdit, setSelectedProductToEdit, onViewProductDetails }) => {
-    // New state to explicitly control "Add New Product" form visibility
+const ProductList = ({ products, onSaveProduct, onDeleteProduct, selectedProductToEdit, setSelectedProductToEdit, onViewProductDetails, onReviewProduct }) => {
     const [isAddingProduct, setIsAddingProduct] = useState(false);
-
-    // Determine if the form should be shown for adding or editing
     const showProductForm = isAddingProduct || selectedProductToEdit !== null;
-
     const handleAddNewProductClick = () => {
-        setSelectedProductToEdit(null); // Ensure no product is selected for editing
-        setIsAddingProduct(true); // Explicitly show the add product form
+        setSelectedProductToEdit(null); 
+        setIsAddingProduct(true);
     };
-
     const handleEditProductClick = (product) => {
-        setSelectedProductToEdit(product); // Set the product to be edited
-        setIsAddingProduct(false); // Ensure add form is hidden
+        setSelectedProductToEdit(product);
+        setIsAddingProduct(false); 
     };
-
     const handleCancelProductForm = () => {
-        setSelectedProductToEdit(null); // Hide edit form
-        setIsAddingProduct(false); // Hide add form
+        setSelectedProductToEdit(null);
+        setIsAddingProduct(false);
     };
 
-    const handleReviewClick = (productName) => {
-        // Using a custom modal for confirmation instead of window.alert
-        const reviewModal = document.createElement('div');
-        reviewModal.className = "fixed inset-0 bg-black/50 flex justify-center items-center z-50";
-        reviewModal.innerHTML = `
-          <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl text-center max-w-sm mx-auto">
-            <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">Review Product</h3>
-            <p class="text-gray-700 dark:text-gray-300 mb-6">Initiating review for: <span class="font-bold">${productName}</span>. This is where you'd implement your review submission form or page.</p>
-            <button id="closeReviewModal" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 transition duration-300">
-              Got It!
-            </button>
-          </div>
-        `;
-        document.body.appendChild(reviewModal);
-
-        document.getElementById('closeReviewModal').onclick = () => {
-            document.body.removeChild(reviewModal);
-        };
-    };
     return (
         <main className="flex-grow flex flex-col items-center p-4 w-full">
             <div className="w-full bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6">
                 <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-2xl font-bold text-gray-800 dark:text-white">Products</h3> {/* Changed from Your Products to Products */}
+                    <h3 className="text-2xl font-bold text-gray-800 dark:text-white">Products</h3> 
                     <button
                         onClick={showProductForm ? handleCancelProductForm : handleAddNewProductClick}
                         className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-75 transition duration-300 ease-in-out transform hover:scale-105"
@@ -57,7 +32,7 @@ const ProductList = ({ products, onSaveProduct, onDeleteProduct, selectedProduct
 
                 {showProductForm ? (
                     <ProductPage
-                        productToEdit={selectedProductToEdit} // Will be null when adding new
+                        productToEdit={selectedProductToEdit} 
                         onSaveProduct={onSaveProduct}
                         onCancelEdit={handleCancelProductForm}
                     />
@@ -95,7 +70,7 @@ const ProductList = ({ products, onSaveProduct, onDeleteProduct, selectedProduct
                                                 </svg>
                                             </button>
                                             <button
-                                                onClick={() => handleReviewClick(product.name)}
+                                                onClick={() => onReviewProduct(product)}
                                                 className="bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-bold p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-75 transition duration-200"
                                                 aria-label="Review product"
                                             >

@@ -4,7 +4,7 @@ const FieldDetailPage = ({ product, field, onAddSubfield, onBackToProductDetail 
     const [showSubfieldForm, setShowSubfieldForm] = useState(false);
     const [subfieldName, setSubfieldName] = useState('');
     const [subfieldDescription, setSubfieldDescription] = useState('');
-    const [subfieldImages, setSubfieldImages] = useState([]); // Stores Data URLs
+    const [subfieldImages, setSubfieldImages] = useState([]);
     const [subfieldError, setSubfieldError] = useState('');
     const [subfieldSuccessMessage, setSubfieldSuccessMessage] = useState('');
     const handleShowSubfieldForm = (value) => {
@@ -12,19 +12,29 @@ const FieldDetailPage = ({ product, field, onAddSubfield, onBackToProductDetail 
         setSubfieldError('');
         setSubfieldSuccessMessage('');
     }
-    const [previewImages, setPreviewImages] = useState([]); // for previews only
+    const [previewImages, setPreviewImages] = useState([]);
+    const [selectedImage, setSelectedImage] = useState(null);
 
     const handleImageChange = (e) => {
         const files = Array.from(e.target.files);
-        if (files.length > 5) {
-            setSubfieldError('You can upload a maximum of 5 images.');
-            return;
-        }
-        setSubfieldError('');
 
-        setSubfieldImages(files); // keep files for upload
-        setPreviewImages(files.map(file => URL.createObjectURL(file))); // preview
+        setSubfieldImages(prev => {
+            const combined = [...prev, ...files];
+            if (combined.length > 5) {
+                setSubfieldError('You can upload a maximum of 5 images.');
+                return combined.slice(0, 5);
+            }
+            return combined;
+        });
+
+        setPreviewImages(prev => {
+            const combined = [...prev, ...files.map(file => URL.createObjectURL(file))];
+            return combined.slice(0, 5);
+        });
+
+        e.target.value = '';
     };
+
 
     const handleRemoveImage = (indexToRemove) => {
         setSubfieldImages(prev => prev.filter((_, i) => i !== indexToRemove));
@@ -125,6 +135,7 @@ const FieldDetailPage = ({ product, field, onAddSubfield, onBackToProductDetail 
                                     id="subfieldImages"
                                     className="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 dark:bg-gray-600 dark:text-gray-200 leading-tight focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-200"
                                     accept="image/*"
+                                    capture="environment"
                                     multiple
                                     onChange={handleImageChange}
                                 />
@@ -132,6 +143,7 @@ const FieldDetailPage = ({ product, field, onAddSubfield, onBackToProductDetail 
                                     {previewImages.map((imageSrc, index) => (
                                         <div key={index} className="relative">
                                             <img
+                                                onClick={() => setSelectedImage(imageSrc)}
                                                 src={imageSrc}
                                                 alt={`Subfield ${index}`}
                                                 className="h-20 w-20 object-cover rounded-lg border border-gray-300 dark:border-gray-600"
@@ -170,12 +182,25 @@ const FieldDetailPage = ({ product, field, onAddSubfield, onBackToProductDetail 
                             <li key={subfield._id} className="py-4">
                                 <h4 className="text-xl font-semibold text-gray-800 dark:text-white mb-1">{subfield.name}</h4>
                                 <p className="text-gray-600 dark:text-gray-300 text-sm mb-2">{subfield.description}</p>
-                                <ImageGallery subfield={subfield} />
+                                {subfield.images.length > 0 && (
+                                    <div className="flex flex-wrap gap-2 mt-2">
+                                        {subfield.images.map((imgSrc, imgIndex) => (
+                                            <img
+                                                key={imgIndex}
+                                                src={imgSrc.image}
+                                                alt={`Subfield Image ${imgIndex + 1}`}
+                                                className="h-16 w-16 object-cover rounded-md border border-gray-300 dark:border-gray-600 cursor-pointer"
+                                                onClick={() => setSelectedImage(imgSrc.image)}
+                                            />
+                                        ))}
+                                    </div>
+                                )}
                             </li>
                         ))}
                     </ul>
                 )}
             </div>
+            {selectedImage && <ImageGallery selectedImage={selectedImage} closeImage={() => setSelectedImage(null)} />}
         </main>
     );
 };

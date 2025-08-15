@@ -112,3 +112,39 @@ export const addProductSubField = async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 };
+
+
+export const saveReviewImage = async (req, res) => {
+    try {
+        const { id, fieldId, subfieldId, imageId } = req.params;
+        const uploadedFileName = req.uploadedFileName;
+
+        const product = await Product.findById(id);
+        if (!product) {
+            return res.status(404).json({ message: "Product not found" });
+        }
+
+        const field = product.fields.id(fieldId);
+        if (!field) {
+            return res.status(404).json({ message: "Field not found" });
+        }
+
+        const subfield = field.subfields.id(subfieldId);
+        if (!subfield) {
+            return res.status(404).json({ message: "Subfield not found" });
+        }
+
+        const image = subfield.images.id(imageId);
+        if (!image) {
+            return res.status(404).json({ message: "Image not found" });
+        }
+
+        image.reviewImage = uploadedFileName;
+        await product.save();
+
+        res.status(200).json(product);
+    } catch (error) {
+        console.error("Error saving review image:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};

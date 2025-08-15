@@ -4,12 +4,14 @@ import axios from "axios";
 import ProductList from "../product/ProductList";
 import ProductDetailPage from "../product/ProductDetailPage";
 import FieldDetailPage from "../product/FieldDetailPage";
+import ProductReviewPage from "../product/ProductReviewPage";
 const MemberDashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [products, setProducts] = useState([]);
   const [selectedProductToEdit, setSelectedProductToEdit] = useState(null);
   const [selectedProductForDetail, setSelectedProductForDetail] = useState(null);
   const [selectedFieldForDetail, setSelectedFieldForDetail] = useState(null);
+  const [selectedProductForReview, setSelectedProductForReview] = useState(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -61,6 +63,18 @@ const MemberDashboard = () => {
 
     return true;
   };
+  const handleSaveReviewImage = async (productId, fieldId, subfieldId, imageId, formData) => {
+    const response = await axios.post(`/api/products/${productId}/fields/${fieldId}/subfields/${subfieldId}/images/${imageId}/review`, formData);
+    const updatedProductFromServer = response.data;
+    setProducts(prevProducts =>
+      prevProducts.map(product =>
+        product._id === productId ? updatedProductFromServer : product
+      )
+    );
+    setSelectedProductForReview(updatedProductFromServer);
+    return true;
+  };
+
 
   const handleDeleteProduct = async (productId) => {
     const confirmDeleteModal = document.createElement('div');
@@ -99,7 +113,7 @@ const MemberDashboard = () => {
   return (
     <>
 
-      {!selectedProductForDetail && (
+      {!selectedProductForDetail && !selectedProductForReview && (
         <ProductList
           products={products}
           onSaveProduct={handleSaveProduct}
@@ -109,9 +123,12 @@ const MemberDashboard = () => {
           onViewProductDetails={(product) => {
             setSelectedProductForDetail(product);
           }}
+          onReviewProduct={(product) => {
+            setSelectedProductForReview(product);
+          }}
         />
       )}
-      {selectedProductForDetail && !selectedFieldForDetail && (
+      {selectedProductForDetail && !selectedFieldForDetail && !selectedProductForReview && (
         <ProductDetailPage
           product={selectedProductForDetail}
           onAddField={handleAddField}
@@ -119,12 +136,19 @@ const MemberDashboard = () => {
           onSelectField={(field) => setSelectedFieldForDetail(field)}
         />
       )}
-      {selectedProductForDetail && selectedFieldForDetail && (
+      {selectedProductForDetail && selectedFieldForDetail && !selectedProductForReview && (
         <FieldDetailPage
           product={selectedProductForDetail}
           field={selectedFieldForDetail}
           onAddSubfield={handleAddSubfield}
           onBackToProductDetail={() => setSelectedFieldForDetail(null)}
+        />
+      )}
+      {selectedProductForReview && (
+        <ProductReviewPage
+          product={selectedProductForReview}
+          onSaveReviewImage={handleSaveReviewImage}
+          onBackToProducts={() => setSelectedProductForReview(null)}
         />
       )}
     </>
